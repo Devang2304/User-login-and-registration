@@ -4,7 +4,7 @@ var router = express.Router();
 var User=require('../model/model');
 
 router.get('/', function(req, res,next){
-    return res.render('index.ejs');
+    return res.render('index.js');
 });
 
 router.get('/',function(req,res,next){
@@ -53,3 +53,25 @@ router.get('/',function(req,res,next){
     }
 });
 
+router.get('/login', function(req, res,next){
+    return res.render('login.js');
+});
+
+router.post('/login', function(req,res,next){
+    User.findOne({email:req.body.email}),function(err,data){
+        if(data){
+            
+            if(data.password==req.body.password){
+                req.session.userId = data.unique_id;
+                res.send({"Success":"Success"});
+            }
+            else{
+                res.send({"Success":"Wrong password"});
+            }
+        }else{
+            res.send({"Success":"This email is not registered !!"});
+        }
+    }    
+    });
+
+    module.exports=router;
